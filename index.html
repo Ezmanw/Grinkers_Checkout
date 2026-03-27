@@ -1,82 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Virtual Checkout Launcher</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
-
-:root {
-  --md-sys-color-primary: #81C784;
-  --md-sys-color-on-primary: #003314;
-  --md-sys-color-background: #0D1610;
-  --md-sys-color-on-background: #E1E3DF;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
-  font-family: 'Outfit', sans-serif;
-  background: var(--md-sys-color-background);
-  color: var(--md-sys-color-on-background);
-  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0D1610;
+  color: white;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 24px;
+  align-items: center;
+  height: 100vh;
 }
 
-.panel {
-  width: min(900px, 100%);
-  padding: 40px;
-  border-radius: 28px;
-  background: rgba(16,27,19,0.86);
+.container {
+  text-align: center;
+  max-width: 800px;
 }
 
-h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  color: var(--md-sys-color-primary);
-}
-
-.subtitle {
-  margin-top: 12px;
-  opacity: 0.8;
-}
-
-.button-row {
+.buttons {
   margin-top: 20px;
   display: flex;
   gap: 12px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.button {
-  border: none;
+a.button {
+  padding: 12px 18px;
   border-radius: 999px;
-  padding: 12px 16px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: bold;
 }
 
-.primary { background: #81C784; color: #003314; }
-.tonal { background: #25502A; color: #C0F3C1; }
+.primary {
+  background: #81C784;
+  color: #003314;
+}
+
+.tonal {
+  background: #25502A;
+  color: #C0F3C1;
+}
 
 .marquee {
-  margin-top: 30px;
+  margin-top: 40px;
   overflow: hidden;
 }
 
 .track {
   display: flex;
-  gap: 16px;
-  animation: scroll 25s linear infinite;
+  gap: 12px;
+  animation: scroll 20s linear infinite;
 }
 
 @keyframes scroll {
@@ -85,148 +63,37 @@ h1 {
 }
 
 .item {
-  font-size: 2.5rem;
-  background: rgba(255,255,255,0.05);
-  padding: 14px;
-  border-radius: 16px;
+  font-size: 2rem;
+  padding: 10px;
 }
-
 </style>
 </head>
 
 <body>
-  <main class="panel">
-    <h1>Pick a page and jump in.</h1>
-    <p class="subtitle">Use this as the front page for your checkout setup.</p>
+<div class="container">
+  <h1>Pick a page and jump in.</h1>
+  <p>Use this as the front page for your checkout setup.</p>
 
-    <div class="button-row">
-      <a class="button primary" href="scanner.html">
-        <span class="material-symbols-outlined">qr_code_scanner</span>
-        Checkout
-      </a>
+  <div class="buttons">
+    <a class="button primary" href="scanner.html">Checkout</a>
+    <a class="button tonal" href="mobile.html">Mobile companion</a>
+  </div>
 
-      <a class="button tonal" href="mobile.html">
-        <span class="material-symbols-outlined">phone_android</span>
-        Mobile companion
-      </a>
-    </div>
-
-    <div class="marquee">
-      <div class="track" id="track"></div>
-    </div>
-  </main>
+  <div class="marquee">
+    <div class="track" id="track"></div>
+  </div>
+</div>
 
 <script>
 const emojis = ['🍎','🥖','🥑','🧀','🥩','🥦','🥪','🥐','🍉','🍣','🍔','🍕','🌮','🍩','🥨','🥫','🍗','🍙','🍿','🥓'];
 
 const track = document.getElementById('track');
 
-// duplicate for seamless loop
-const content = [...emojis, ...emojis]
+// duplicate for smooth loop
+track.innerHTML = [...emojis, ...emojis]
   .map(e => `<div class="item">${e}</div>`)
   .join('');
-
-track.innerHTML = content;
 </script>
-
-</body>
-</html>    .icon-bubble {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 1;
-    }
-  </style>
-</head>
-
-<body>
-  <main class="shell">
-
-    <section class="panel hero">
-      <h1>Virtual Checkout</h1>
-      <p>Pick a page and jump in.</p>
-
-      <div class="button-row">
-        <a class="button primary" id="btn-home-scanner" href="#">
-          <span class="material-symbols-outlined">qr_code_scanner</span>
-          Checkout
-        </a>
-
-        <a class="button tonal" id="btn-home-secondary" href="#">
-          <span class="material-symbols-outlined">phone_android</span>
-          Mobile companion
-        </a>
-
-        <button class="button ghost" id="btn-copy-links">
-          <span class="material-symbols-outlined">content_copy</span>
-          Copy links
-        </button>
-      </div>
-    </section>
-
-    <section class="panel chooser">
-      <h2>Pages</h2>
-      <div id="page-list"></div>
-    </section>
-
-  </main>
-
-  <script>
-    const PAGES = [
-      {
-        name: 'Scanner',
-        file: 'scanner.html',
-        icon: 'qr_code_scanner',
-        description: 'Main scanning interface.',
-        cta: 'Launch'
-      },
-      {
-        name: 'Mobile companion',
-        file: 'mobile.html',
-        icon: 'phone_android',
-        description: 'Phone-side controls.',
-        cta: 'Launch'
-      }
-    ];
-
-    const pageList = document.getElementById('page-list');
-
-    const makeCard = (page) => {
-      const a = document.createElement('a');
-      a.className = 'launch-card';
-      a.href = page.file;
-
-      a.innerHTML = `
-        <div class="icon-bubble">
-          <span class="material-symbols-outlined">${page.icon}</span>
-        </div>
-        <div>
-          <strong>${page.name}</strong>
-          <p>${page.description}</p>
-        </div>
-        <div>${page.cta}</div>
-      `;
-      return a;
-    };
-
-    PAGES.forEach(p => pageList.appendChild(makeCard(p)));
-
-    document.getElementById('btn-home-scanner').href = PAGES[0].file;
-    document.getElementById('btn-home-secondary').href = PAGES[1].file;
-
-    document.getElementById('btn-copy-links').addEventListener('click', async () => {
-      const text = PAGES.map(p => `${p.name}: ${p.file}`).join('\n');
-      try {
-        await navigator.clipboard.writeText(text);
-        alert('Copied links');
-      } catch {
-        alert(text);
-      }
-    });
-  </script>
 
 </body>
 </html>
