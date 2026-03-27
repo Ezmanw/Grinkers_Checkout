@@ -1,0 +1,1029 @@
+<!DOCTYPE html><html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Virtual Checkout Launcher</title>
+
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');:root {
+
+  --md-sys-color-primary: #81C784;
+
+  --md-sys-color-on-primary: #003314;
+
+  --md-sys-color-primary-container: #005024;
+
+  --md-sys-color-on-primary-container: #A3F9A6;
+
+
+
+  --md-sys-color-secondary: #A5D6A7;
+
+  --md-sys-color-on-secondary: #0D3915;
+
+  --md-sys-color-secondary-container: #25502A;
+
+  --md-sys-color-on-secondary-container: #C0F3C1;
+
+
+
+  --md-sys-color-background: #0D1610;
+
+  --md-sys-color-on-background: #E1E3DF;
+
+
+
+  --md-sys-color-surface: #101B13;
+
+  --md-sys-color-on-surface: #E1E3DF;
+
+  --md-sys-color-surface-variant: #414942;
+
+  --md-sys-color-on-surface-variant: #C1C9BF;
+
+
+
+  --md-sys-color-outline: #8B938A;
+
+  --shape-small: 12px;
+
+  --shape-medium: 20px;
+
+  --shape-large: 28px;
+
+  --shape-extra-large: 36px;
+
+}
+
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+
+html, body { min-height: 100%; }
+
+
+
+body {
+
+  font-family: 'Outfit', sans-serif;
+
+  background:
+
+    radial-gradient(circle at top, rgba(129, 199, 132, 0.18), transparent 36%),
+
+    radial-gradient(circle at bottom right, rgba(165, 214, 167, 0.12), transparent 30%),
+
+    var(--md-sys-color-background);
+
+  color: var(--md-sys-color-on-background);
+
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 24px;
+
+}
+
+
+
+h1, h2, h3 { font-weight: 700; letter-spacing: -0.03em; }
+
+p { line-height: 1.5; }
+
+.material-symbols-outlined {
+
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+
+  vertical-align: middle;
+
+}
+
+
+
+.shell {
+
+  width: min(1100px, 100%);
+
+  height: min(780px, 100vh - 48px);
+
+  display: grid;
+
+  grid-template-columns: 1.1fr 0.9fr;
+
+  gap: 24px;
+
+}
+
+
+
+.panel {
+
+  background: rgba(16, 27, 19, 0.86);
+
+  border: 1px solid rgba(139, 147, 138, 0.24);
+
+  backdrop-filter: blur(18px);
+
+  border-radius: var(--shape-extra-large);
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+  overflow: hidden;
+
+  position: relative;
+
+}
+
+
+
+.hero {
+
+  padding: 40px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  min-height: 100%;
+
+  position: relative;
+
+}
+
+
+
+.hero::before {
+
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+
+    linear-gradient(135deg, rgba(129,199,132,0.08), transparent 35%),
+
+    linear-gradient(315deg, rgba(165,214,167,0.06), transparent 40%);
+
+  pointer-events: none;
+
+}
+
+
+
+.top-row, .bottom-row { position: relative; z-index: 2; }
+
+
+
+.brand-pill {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  background: rgba(129, 199, 132, 0.12);
+
+  color: var(--md-sys-color-on-primary-container);
+
+  border: 1px solid rgba(129, 199, 132, 0.22);
+
+  width: fit-content;
+
+  font-weight: 600;
+
+}
+
+
+
+.title {
+
+  font-size: clamp(3rem, 6vw, 5.8rem);
+
+  line-height: 0.95;
+
+  margin-top: 22px;
+
+  color: var(--md-sys-color-primary);
+
+  text-wrap: balance;
+
+}
+
+
+
+.subtitle {
+
+  margin-top: 18px;
+
+  max-width: 34rem;
+
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+
+  color: var(--md-sys-color-on-surface-variant);
+
+}
+
+
+
+.marquee {
+
+  margin-top: 28px;
+
+  display: flex;
+
+  overflow: hidden;
+
+  width: 100%;
+
+  gap: 18px;
+
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+
+}
+
+
+
+.marquee-track {
+
+  display: flex;
+
+  gap: 18px;
+
+  min-width: 100%;
+
+  animation: scroll-left 32s linear infinite;
+
+  flex-shrink: 0;
+
+}
+
+
+
+@keyframes scroll-left {
+
+  from { transform: translateX(0); }
+
+  to { transform: translateX(-100%); }
+
+}
+
+
+
+.grocery-item {
+
+  width: 88px;
+
+  height: 88px;
+
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.06);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 2.6rem;
+
+  flex-shrink: 0;
+
+  box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+
+}
+
+
+
+.hint {
+
+  margin-top: 26px;
+
+  font-size: 1rem;
+
+  color: rgba(225,227,223,0.72);
+
+}
+
+
+
+.chooser {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+
+  padding: 24px;
+
+  height: 100%;
+
+}
+
+
+
+.chooser-head {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 16px;
+
+  padding: 8px 8px 4px;
+
+}
+
+
+
+.chooser-head h2 {
+
+  font-size: 1.8rem;
+
+  color: var(--md-sys-color-on-surface);
+
+}
+
+
+
+.chooser-head p {
+
+  color: var(--md-sys-color-on-surface-variant);
+
+  margin-top: 6px;
+
+  max-width: 26rem;
+
+}
+
+
+
+.status {
+
+  padding: 10px 14px;
+
+  border-radius: 999px;
+
+  font-weight: 600;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  background: rgba(129, 199, 132, 0.12);
+
+  color: var(--md-sys-color-primary);
+
+  border: 1px solid rgba(129, 199, 132, 0.18);
+
+  white-space: nowrap;
+
+}
+
+
+
+.card-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 14px;
+
+  flex: 1;
+
+  min-height: 0;
+
+  overflow: auto;
+
+  padding-right: 4px;
+
+}
+
+
+
+.launch-card {
+
+  text-decoration: none;
+
+  color: inherit;
+
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+
+  border: 1px solid rgba(139, 147, 138, 0.18);
+
+  border-radius: var(--shape-extra-large);
+
+  padding: 22px;
+
+  display: grid;
+
+  grid-template-columns: 72px 1fr auto;
+
+  gap: 18px;
+
+  align-items: center;
+
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+
+  position: relative;
+
+  overflow: hidden;
+
+}
+
+
+
+.launch-card:hover {
+
+  transform: translateY(-2px);
+
+  border-color: rgba(129, 199, 132, 0.34);
+
+  background: linear-gradient(180deg, rgba(129,199,132,0.08), rgba(255,255,255,0.02));
+
+}
+
+
+
+.launch-card:active { transform: translateY(0px) scale(0.99); }
+
+
+
+.icon-bubble {
+
+  width: 72px;
+
+  height: 72px;
+
+  border-radius: 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: rgba(129, 199, 132, 0.14);
+
+  color: var(--md-sys-color-primary);
+
+  border: 1px solid rgba(129, 199, 132, 0.18);
+
+}
+
+
+
+.icon-bubble .material-symbols-outlined { font-size: 2rem; }
+
+
+
+.card-copy h3 {
+
+  font-size: 1.35rem;
+
+  margin-bottom: 6px;
+
+}
+
+
+
+.card-copy p {
+
+  color: var(--md-sys-color-on-surface-variant);
+
+  font-size: 0.98rem;
+
+  max-width: 28rem;
+
+}
+
+
+
+.cta {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 12px 16px;
+
+  border-radius: 999px;
+
+  background: var(--md-sys-color-secondary-container);
+
+  color: var(--md-sys-color-on-secondary-container);
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+}
+
+
+
+.cta.secondary {
+
+  background: rgba(255,255,255,0.04);
+
+  color: var(--md-sys-color-on-surface);
+
+}
+
+
+
+.footer-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 8px 4px 0;
+
+  color: var(--md-sys-color-on-surface-variant);
+
+  font-size: 0.95rem;
+
+  flex-wrap: wrap;
+
+}
+
+
+
+.tiny-links {
+
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+}
+
+
+
+.tiny-links span {
+
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.04);
+
+  border: 1px solid rgba(139,147,138,0.14);
+
+}
+
+
+
+.launch-card[data-accent="primary"] .icon-bubble { background: rgba(129,199,132,0.16); }
+
+.launch-card[data-accent="secondary"] .icon-bubble { background: rgba(165,214,167,0.13); color: #C0F3C1; }
+
+.launch-card[data-accent="amber"] .icon-bubble { background: rgba(255, 214, 102, 0.10); color: #ffe08f; }
+
+
+
+.button-row {
+
+  display: flex;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+  margin-top: 18px;
+
+}
+
+
+
+.button {
+
+  appearance: none;
+
+  border: none;
+
+  border-radius: 999px;
+
+  padding: 14px 18px;
+
+  font: inherit;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  text-decoration: none;
+
+  transition: transform 0.18s ease, background 0.18s ease;
+
+}
+
+
+
+.button:hover { transform: translateY(-1px); }
+
+.button:active { transform: translateY(0px) scale(0.99); }
+
+
+
+.button.primary {
+
+  background: var(--md-sys-color-primary);
+
+  color: var(--md-sys-color-on-primary);
+
+}
+
+
+
+.button.tonal {
+
+  background: var(--md-sys-color-secondary-container);
+
+  color: var(--md-sys-color-on-secondary-container);
+
+}
+
+
+
+.button.ghost {
+
+  background: rgba(255,255,255,0.05);
+
+  color: var(--md-sys-color-on-surface);
+
+  border: 1px solid rgba(139,147,138,0.18);
+
+}
+
+
+
+@media (max-width: 920px) {
+
+  body { overflow: auto; padding: 16px; }
+
+  .shell {
+
+    height: auto;
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .hero, .chooser { min-height: 0; }
+
+  .launch-card {
+
+    grid-template-columns: 64px 1fr;
+
+  }
+
+  .launch-card .cta {
+
+    grid-column: 1 / -1;
+
+    justify-content: center;
+
+  }
+
+}
+
+
+
+@media (max-width: 560px) {
+
+  .hero, .chooser { padding: 18px; }
+
+  .title { font-size: 3rem; }
+
+  .grocery-item { width: 72px; height: 72px; font-size: 2.15rem; }
+
+  .icon-bubble { width: 64px; height: 64px; }
+
+  .chooser-head { flex-direction: column; }
+
+  .status { width: fit-content; }
+
+  .launch-card { padding: 18px; }
+
+}
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <main class="shell">
+
+    <section class="panel hero">
+
+      <div class="top-row">
+
+        <div class="brand-pill">
+
+          <span class="material-symbols-outlined">storefront</span>
+
+          Virtual Checkout
+
+        </div><h1 class="title">Pick a page and jump in.</h1>
+
+    <p class="subtitle">
+
+      Use this as the front page for your checkout setup. Open the scanner, the mobile page, or your other HTML file from one clean menu.
+
+    </p>
+
+
+
+    <div class="button-row">
+
+      <a class="button primary" id="btn-home-scanner" href="#">
+
+        <span class="material-symbols-outlined">qr_code_scanner</span>
+
+        Open scanner
+
+      </a>
+
+      <a class="button tonal" id="btn-home-secondary" href="#">
+
+        <span class="material-symbols-outlined">phone_android</span>
+
+        Open mobile page
+
+      </a>
+
+      <button class="button ghost" id="btn-copy-links" type="button">
+
+        <span class="material-symbols-outlined">content_copy</span>
+
+        Copy links
+
+      </button>
+
+    </div>
+
+
+
+    <div class="marquee" aria-hidden="true">
+
+      <div class="marquee-track" id="marquee-1"></div>
+
+      <div class="marquee-track" id="marquee-2"></div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="bottom-row">
+
+    <p class="hint">Tip: rename the files at the top in the script if yours are not called <strong>scanner.html</strong> and <strong>mobile.html</strong>.</p>
+
+  </div>
+
+</section>
+
+
+
+<aside class="panel chooser">
+
+  <div class="chooser-head">
+
+    <div>
+
+      <h2>Choose a page</h2>
+
+      <p>Tap one of these cards to open the right HTML file. This stays nice on mobile too.</p>
+
+    </div>
+
+    <div class="status">
+
+      <span class="material-symbols-outlined">check_circle</span>
+
+      Ready to launch
+
+    </div>
+
+  </div>
+
+
+
+  <div class="card-grid" id="page-list"></div>
+
+
+
+  <div class="footer-row">
+
+    <span>Works best on GitHub Pages or localhost.</span>
+
+    <div class="tiny-links">
+
+      <span>HTTPS for camera</span>
+
+      <span>Easy file switcher</span>
+
+    </div>
+
+  </div>
+
+</aside>
+
+
+
+  </main> <script>
+
+    const PAGES = [
+
+      {
+
+        name: 'Checkout',
+
+        file: 'Checkout.html',
+
+        icon: 'qr_code_scanner',
+
+        description: 'Open the main checkout interface.',
+
+        cta: 'Launch Checkout',
+
+        accent: 'primary'
+
+      },
+
+      {
+
+        name: 'Mobile companion',
+
+        file: 'Mobile.html',
+
+        icon: 'phone_android',
+
+        description: 'Open the phone-side page for adding products and debugging',
+
+        cta: 'Launch mobile page',
+
+        accent: 'secondary'
+
+      }
+
+    ];
+
+
+
+    // Change this if your second file has a different name.
+
+    const defaultSecondaryPage = PAGES[1].file;
+
+
+
+    const emojis = ['🍎','🥖','🥑','🧀','🥩','🥦','🥪','🥐','🍉','🍣','🍔','🍕','🌮','🍩','🥨','🥫','🍗','🍙','🍿','🥓'];
+
+    const shuffled = [...emojis].sort(() => 0.5 - Math.random());
+
+    const html = shuffled.map(e => `<div class="grocery-item">${e}</div>`).join('');
+
+    document.getElementById('marquee-1').innerHTML = html;
+
+    document.getElementById('marquee-2').innerHTML = html;
+
+
+
+    const pageList = document.getElementById('page-list');
+
+    const btnHomeScanner = document.getElementById('btn-home-scanner');
+
+    const btnHomeSecondary = document.getElementById('btn-home-secondary');
+
+    const btnCopyLinks = document.getElementById('btn-copy-links');
+
+
+
+    const makeCard = (page) => {
+
+      const a = document.createElement('a');
+
+      a.className = 'launch-card';
+
+      a.href = page.file;
+
+      a.setAttribute('data-accent', page.accent);
+
+      a.innerHTML = `
+
+        <div class="icon-bubble"><span class="material-symbols-outlined">${page.icon}</span></div>
+
+        <div class="card-copy">
+
+          <h3>${page.name}</h3>
+
+          <p>${page.description}</p>
+
+        </div>
+
+        <div class="cta${page.accent === 'secondary' ? ' secondary' : ''}">
+
+          ${page.cta}
+
+          <span class="material-symbols-outlined">arrow_forward</span>
+
+        </div>
+
+      `;
+
+      return a;
+
+    };
+
+
+
+    PAGES.forEach(page => pageList.appendChild(makeCard(page)));
+
+
+
+    btnHomeScanner.href = PAGES[0].file;
+
+    btnHomeSecondary.href = defaultSecondaryPage;
+
+
+
+    btnCopyLinks.addEventListener('click', async () => {
+
+      const text = PAGES.map(p => `${p.name}: ${p.file}`).join('\n');
+
+      try {
+
+        await navigator.clipboard.writeText(text);
+
+        btnCopyLinks.innerHTML = '<span class="material-symbols-outlined">done</span>Copied';
+
+        setTimeout(() => {
+
+          btnCopyLinks.innerHTML = '<span class="material-symbols-outlined">content_copy</span>Copy links';
+
+        }, 1400);
+
+      } catch (err) {
+
+        alert(text);
+
+      }
+
+    });
+
+  </script></body>
+
+</html>
